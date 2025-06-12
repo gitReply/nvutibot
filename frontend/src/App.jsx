@@ -1,22 +1,28 @@
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
 import { fetchBalance, playNVUTI, sendNotif } from './api'
-import { WebApp } from '@twa-dev/sdk'
 
 export default function App() {
-  const tg = WebApp.initDataUnsafe.user
+  // Используем глобальный WebApp SDK
+  const WebApp = window.Telegram && window.Telegram.WebApp
+  const tg = WebApp?.initDataUnsafe?.user ?? { id: 0, username: 'Guest', photo_url: '' }
+
   const [bet, setBet] = useState('')
   const [result, setResult] = useState('')
   const [notif, setNotif] = useState('')
+
   const { data, mutate } = useSWR(['bal', tg.id], () => fetchBalance(tg.id))
 
-  useEffect(() => { WebApp.ready(); WebApp.expand() }, [])
+  useEffect(() => {
+    WebApp?.ready()
+    WebApp?.expand()
+  }, [])
 
   if (!data) return <div className="p-4">Загрузка...</div>
 
   const onPlay = async () => {
     const b = parseInt(bet)
-    if (!b || b<1) return alert('Неверная ставка')
+    if (!b || b < 1) return alert('Неверная ставка')
     const res = await playNVUTI(tg.id, b)
     setResult(res.result)
     mutate()
@@ -29,9 +35,9 @@ export default function App() {
   }
 
   return (
-    <div className="p-4 flex flex-col min-h-screen">
+    <div className="p-4 flex flex-col min-h-screen bg-gray-900 text-white">
       <header className="flex items-center mb-4">
-        <img src={tg.photo_url} className="w-12 h-12 rounded-full mr-2"/>
+        <img src={tg.photo_url} className="w-12 h-12 rounded-full mr-2" alt="Avatar"/>
         <div>
           <div className="text-lg font-bold">{tg.username}</div>
           <div>⭐ {data.balance} | 🎁 {data.bonus}</div>
@@ -44,7 +50,7 @@ export default function App() {
           className="p-2 rounded text-black w-32"
           placeholder="Ставка"
           value={bet}
-          onChange={e=>setBet(e.target.value)}
+          onChange={e => setBet(e.target.value)}
         />
         <button className="ml-2 px-4 py-2 bg-green-500 rounded" onClick={onPlay}>
           Играть
@@ -59,7 +65,7 @@ export default function App() {
             className="p-2 rounded text-black w-full mb-2"
             placeholder="Текст уведомления"
             value={notif}
-            onChange={e=>setNotif(e.target.value)}
+            onChange={e => setNotif(e.target.value)}
           />
           <button className="px-4 py-2 bg-blue-500 rounded" onClick={onNotify}>
             Отправить
