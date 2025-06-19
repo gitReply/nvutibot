@@ -1,0 +1,15 @@
+{
+  "name": "comet-mini-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "telegram-web-app": "^1.0.0"
+  },
+"scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production"
+}
+
+}

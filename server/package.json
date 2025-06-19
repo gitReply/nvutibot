@@ -1,0 +1,25 @@
+{
+  "name": "comet-server",
+  "version": "1.0.0",
+  "main": "src/index.js",
+"scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production"
+},
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-telegram-bot-api": "^0.61.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.21.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.2.4",
+    "nodemon": "^2.0.15"
+  }
+}
